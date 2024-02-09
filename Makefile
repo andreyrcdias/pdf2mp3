@@ -5,9 +5,9 @@ install-dev:
 	pip install -r requirements-dev.txt
 
 lint:
-	black . --line-length 79
-	isort . --profile black
-	ruff . 
+	black .
+	isort .
+	ruff check .
 
 clean:
 	pyclean .
