@@ -7,25 +7,35 @@ from rich import print
 from rich.progress import track
 
 
-def convert_pdf_to_mp3(input_path: str, output_path: str):
+def convert_pdf_to_mp3(
+    input_path: str,
+    output_path: str,
+    language: str = "en",
+):
     try:
         with open(input_path, "rb") as f:
             pdf_reader = PyPDF2.PdfReader(f)
             pdf_text = ""
 
-            for page in track(range(len(pdf_reader.pages)), description="Converting PDF to text"):
-                pdf_text += pdf_reader.pages[page].extract_text()
+            for page in track(
+                range(len(pdf_reader.pages)),
+                description="Converting PDF to text",
+            ):
+                text = pdf_reader.pages[page].extract_text()
+                # TODO: detect the text language to use with gTTS
+                pdf_text += text
 
-        tts = gTTS(text=pdf_text, lang="en", tld="com.br", slow=False)
+        tts = gTTS(text=pdf_text, lang=language, slow=False)
         tts.save(output_path)
         print(f"Audio file saved as {output_path}")
     except FileNotFoundError:
         print(f"Error: Input file '{input_path}' not found.")
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print(f"[red]An error occurred: {e}[/red]")
 
 
 def main():
+    # TODO: review CLI frameworks
     parser = argparse.ArgumentParser(
         description="Convert a PDF file to an MP3 audio file."
     )
