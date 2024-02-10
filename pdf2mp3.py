@@ -3,49 +3,63 @@ import os
 
 import PyPDF2
 from gtts import gTTS
+from langdetect import detect as detect_language
 from rich import print
-from rich.progress import track
 
 
+def bold(text: str) -> str:
+    return f"[bold]{text}[/bold]"
+
+
+# TODO: add a progress status bar
 def convert_pdf_to_mp3(
     input_path: str,
     output_path: str,
     language: str = "en",
 ):
+    language_detected = False
     try:
         with open(input_path, "rb") as f:
             pdf_reader = PyPDF2.PdfReader(f)
             pdf_text = ""
 
-            for page in track(
-                range(len(pdf_reader.pages)),
-                description="Converting PDF to text",
-            ):
+            print(bold("Converting PDF to text..."))
+            for page in range(len(pdf_reader.pages)):
                 text = pdf_reader.pages[page].extract_text()
-                # TODO: detect the text language to use with gTTS
+                if not language_detected:
+                    language = detect_language(text)
+                    language_detected = True
                 pdf_text += text
 
-        tts = gTTS(text=pdf_text, lang=language, slow=False)
+        tts = gTTS(text=pdf_text, lang=language, lang_check=True, slow=False)
+        print(bold("Saving text to MP3..."))
         tts.save(output_path)
-        print(f"Audio file saved as {output_path}")
+        print(f"Audio file saved as {bold(output_path)}")
     except FileNotFoundError:
-        print(f"Error: Input file '{input_path}' not found.")
+        print(bold(f"Error: Input file '{input_path}' not found."))
     except Exception as e:
-        print(f"[red]An error occurred: {e}[/red]")
+        print(bold(f"[red]An error occurred: {e}[/red]"))
 
 
 def main():
-    # TODO: review CLI frameworks
     parser = argparse.ArgumentParser(
         description="Convert a PDF file to an MP3 audio file."
     )
     parser.add_argument("input_path", type=str, help="Input PDF file path")
-    parser.add_argument("output_path", type=str, help="Output MP3 file path")
+    parser.add_argument("-o", "--output_path", type=str, help="Output MP3 file path")
     args = parser.parse_args()
+
+    input_path = args.input_path
+    output_path = args.output_path
+
     if not os.path.isfile(args.input_path):
-        print(f"Input file {args.input_path} does not exist.")
+        print(bold(f"Input file {args.input_path} does not exist."))
         exit(1)
-    convert_pdf_to_mp3(args.input_path, args.output_path)
+    if not output_path:
+        filename = os.path.basename(input_path).split(".")[0]
+        output_path = f"{filename}.mp3"
+
+    convert_pdf_to_mp3(input_path, output_path)
 
 
 if __name__ == "__main__":
