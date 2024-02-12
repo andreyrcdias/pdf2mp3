@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdf2mp3"
-version = "0.1.0"
+version = "0.1.1"
 description = "Converts PDF to MP3 using Google Text-to-Speech"
 authors = ["andreyrcdias <andreycadimaa@gmail.com>"]
 license = "MIT"
