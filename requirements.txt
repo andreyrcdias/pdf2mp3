@@ -1,4 +1,15 @@
-gtts
-PyPDF2
-rich
-langdetect
+certifi==2024.2.2 ; python_version >= "3.12" and python_version < "4.0"
+charset-normalizer==3.3.2 ; python_version >= "3.12" and python_version < "4.0"
+click==8.1.7 ; python_version >= "3.12" and python_version < "4.0"
+colorama==0.4.6 ; python_version >= "3.12" and python_version < "4.0" and platform_system == "Windows"
+gtts==2.5.1 ; python_version >= "3.12" and python_version < "4.0"
+idna==3.6 ; python_version >= "3.12" and python_version < "4.0"
+langdetect==1.0.9 ; python_version >= "3.12" and python_version < "4.0"
+markdown-it-py==3.0.0 ; python_version >= "3.12" and python_version < "4.0"
+mdurl==0.1.2 ; python_version >= "3.12" and python_version < "4.0"
+pygments==2.17.2 ; python_version >= "3.12" and python_version < "4.0"
+pypdf2==3.0.1 ; python_version >= "3.12" and python_version < "4.0"
+requests==2.31.0 ; python_version >= "3.12" and python_version < "4.0"
+rich==13.7.0 ; python_version >= "3.12" and python_version < "4.0"
+six==1.16.0 ; python_version >= "3.12" and python_version < "4.0"
+urllib3==2.2.0 ; python_version >= "3.12" and python_version < "4.0"
